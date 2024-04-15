@@ -1,11 +1,13 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { formatarDataParaForm } from "e2e/operacoes/datas";
+import { Genero } from "e2e/operacoes/gerarPerfil";
 
 export default class PaginaCadastro {
   private readonly page: Page;
   private readonly botaoVisitarPaginaCadastro: Locator;
   private readonly inputNome: Locator;
   private readonly inputDataNascimento: Locator;
+  private readonly radiosGenero: { [chave in Genero]: Locator };
   private readonly inputCpf: Locator;
   private readonly inputCidade: Locator;
   private readonly inputTelefone: Locator;
@@ -24,6 +26,25 @@ export default class PaginaCadastro {
 
     this.inputNome = page.getByTestId('form-base-input-nome');
     this.inputDataNascimento = page.getByTestId('form-base-input-data-nascimento');
+
+    const radioGeneroFeminino = page
+      .getByTestId('form-base-radio-genero-feminino')
+      .getByLabel('Feminino');
+
+    const radioGeneroMasculino = page
+      .getByTestId('form-base-radio-genero-masculino')
+      .getByLabel('Masculino');
+
+    const radioGeneroNaoInformado = page
+      .getByTestId('form-base-radio-genero-nao-informar')
+      .getByLabel('Prefiro não informar');
+
+    this.radiosGenero = {
+      [Genero.FEMININO]: radioGeneroFeminino,
+      [Genero.MASCULINO]: radioGeneroMasculino,
+      [Genero.OUTRO]: radioGeneroNaoInformado
+    };
+
     this.inputCpf = page.getByTestId('form-base-input-cpf');
     this.inputCidade = page.getByTestId('form-base-input-cidade');
     this.inputTelefone = page.getByTestId('form-base-input-telefone');
@@ -57,6 +78,11 @@ export default class PaginaCadastro {
   async definirDataNascimento(data: Date) {
     const dataFormatada = formatarDataParaForm(data);
     await this.inputDataNascimento.fill(dataFormatada);
+  }
+
+  async definirGenero(genero: Genero) {
+    const radioGenero = this.radiosGenero[genero];
+    await radioGenero.check();
   }
 
   async definirCPF(cpf: string) {
@@ -94,6 +120,14 @@ export default class PaginaCadastro {
 
   async confirmarTermos() {
     await this.checkboxTermos.check();
+  }
+
+  async submeterForm() {
+    await this.botaoSubmeterForm.click();
+  }
+
+  async cadastroFeitoComSucesso() {
+    await expect(this.page).toHaveURL('/auth/login');
   }
 
   async estaMostrandoMensagemDeErro(mensagem: string) {

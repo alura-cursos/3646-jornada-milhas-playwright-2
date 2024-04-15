@@ -10,6 +10,7 @@ test.describe('Página de cadastro', () => {
     await paginaCadastro.visitar();
     await paginaCadastro.definirNome(novoUsuario.nome);
     await paginaCadastro.definirDataNascimento(novoUsuario.dataNascimento);
+    await paginaCadastro.definirGenero(novoUsuario.genero);
     await paginaCadastro.definirCPF(novoUsuario.cpf);
     await paginaCadastro.definirTelefone(novoUsuario.telefone);
     await paginaCadastro.definirCidade(novoUsuario.cidade);
@@ -20,5 +21,7 @@ test.describe('Página de cadastro', () => {
     await paginaCadastro.definirSenha(novoUsuario.senha);
     await paginaCadastro.confirmarSenha(novoUsuario.senha);
     await paginaCadastro.confirmarTermos();
+    await paginaCadastro.submeterForm();
+    await paginaCadastro.cadastroFeitoComSucesso();
   });
 });
