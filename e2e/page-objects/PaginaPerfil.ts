@@ -4,7 +4,7 @@ import { Perfil } from "e2e/operacoes/gerarPerfil";
 
 export default class PaginaPerfil {
   private readonly page: Page;
-  private readonly formBase: FormBaseCadastroEPerfil;
+  readonly formBase: FormBaseCadastroEPerfil;
   private readonly linkPerfil: Locator;
   private readonly botaoDeslogar: Locator;
 
@@ -23,5 +23,10 @@ export default class PaginaPerfil {
 
   async atualizarUsuario(novosDados: Perfil) {
     await this.formBase.preencherForm(novosDados);
+    await this.formBase.submeterForm();
+  }
+
+  async atualizadoComSucesso() {
+    await expect(this.page).toHaveURL('/home');
   }
 }
