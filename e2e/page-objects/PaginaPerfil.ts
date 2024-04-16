@@ -8,12 +8,14 @@ export default class PaginaPerfil {
   readonly formBase: FormBaseCadastroEPerfil;
   private readonly linkPerfil: Locator;
   private readonly botaoDeslogar: Locator;
+  private readonly botaoLogin: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.formBase = new FormBaseCadastroEPerfil(page);
     this.linkPerfil = page.getByTestId('header-link-perfil');
     this.botaoDeslogar = page.getByTestId('form-base-botao-deslogar');
+    this.botaoLogin = page.getByTestId('botao-login');
   }
 
   async visitar() {
@@ -43,5 +45,15 @@ export default class PaginaPerfil {
     await expect(this.formBase.inputCidade).toHaveValue(cidade);
     await expect(this.formBase.inputEstado).toHaveValue(estado);
     await expect(this.formBase.inputEmail).toHaveValue(email);
+  }
+
+  async deslogar() {
+    await this.botaoDeslogar.click();
+  }
+
+  async deslogadoComSucesso() {
+    await expect(this.page).toHaveURL('/auth/login');
+    await expect(this.botaoLogin).toHaveText('Login', { ignoreCase: true });
+    await expect(this.linkPerfil).not.toBeVisible();
   }
 }

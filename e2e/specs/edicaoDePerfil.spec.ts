@@ -14,4 +14,10 @@ testeLogado.describe("Página de perfil", () => {
     await paginaPerfil.visitar();
     await paginaPerfil.dadosEstaoCorretos({ ...novosDados, email: emailAtual });
   });
+
+  testeLogado("Deve conseguir fazer logout", async ({ paginaPerfil }) => {
+    await paginaPerfil.visitar();
+    await paginaPerfil.deslogar();
+    await paginaPerfil.deslogadoComSucesso();
+  });
 });
