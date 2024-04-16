@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import FormBaseCadastroEPerfil from "./FormBaseCadastroEPerfil";
+import { Perfil } from "e2e/operacoes/gerarPerfil";
 
 export default class PaginaPerfil {
   private readonly page: Page;
@@ -18,5 +19,9 @@ export default class PaginaPerfil {
     await this.page.goto('/');
     await this.linkPerfil.click();
     await expect(this.page).toHaveURL('/auth/perfil');
+  }
+
+  async atualizarUsuario(novosDados: Perfil) {
+    await this.formBase.preencherForm(novosDados);
   }
 }
